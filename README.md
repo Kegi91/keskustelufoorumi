@@ -1,4 +1,4 @@
-# tikape-runko
+# Keskustelufoorumi
 
-Tietokantojen perusteet -kurssilla tehtävän web-sovelluksen pohja.
+Team makaroni
 
