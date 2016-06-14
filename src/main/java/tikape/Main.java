@@ -1,15 +1,34 @@
 package tikape;
 
-import java.util.HashMap;
+import java.util.*;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import tikape.database.Database;
-import tikape.database.OpiskelijaDao;
+import tikape.database.*;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        testi();
+    }
+
+    public static void testi() throws Exception {
+        Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
+        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
+        viestiketjuDao.delete(5);
+        viestiketjuDao.delete(6);
+        viestiketjuDao.delete(7);
+        
+        List<Viestiketju> ketjut = viestiketjuDao.findAll();
+        
+        for (Viestiketju vk : ketjut) {
+            System.out.println(vk);
+        }
+        
+        System.out.println(ketjut.get(ketjut.size()-1).getLuomisaika());
+    }
+    
+    public static void esimerkki() throws Exception {
         Database database = new Database("jdbc:sqlite:opiskelijat.db");
         database.init();
 
