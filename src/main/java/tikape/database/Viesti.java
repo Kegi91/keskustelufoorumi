@@ -5,19 +5,19 @@ package tikape.database;
  * @author kujuku
  */
 public class Viesti {
-    private String ketju;
+    private int ketju;
     private String kayttaja;
     private String luomisaika;
     private String sisalto;
 
-    public Viesti(String ketju, String kayttaja, String luomisaika, String sisalto) {
+    public Viesti(int ketju, String kayttaja, String luomisaika, String sisalto) {
         this.ketju = ketju;
         this.kayttaja = kayttaja;
         this.luomisaika = luomisaika;
         this.sisalto = sisalto;
     }
 
-    public String getKetju() {
+    public int getKetju() {
         return ketju;
     }
 
@@ -33,7 +33,7 @@ public class Viesti {
         return sisalto;
     }
 
-    public void setKetju(String ketju) {
+    public void setKetju(int ketju) {
         this.ketju = ketju;
     }
 
