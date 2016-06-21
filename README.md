@@ -1,4 +1,1 @@
-# Keskustelufoorumi
-
-Team makaroni
-
+Tietokantojen perusteet -kurssin lopputyö
