@@ -21,10 +21,10 @@ public class AlueDao implements Dao<Alue, Integer> {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
                 + "FROM Alue "
-                + "WHERE tunnus = '" + key + "';"
+                + "WHERE tunnus = ?;"
         );
 
-//        stmt.setObject(1, key);
+        stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
 
         if (!rs.next()) {
@@ -87,11 +87,12 @@ public class AlueDao implements Dao<Alue, Integer> {
         int uusiTunnus = findSuurinTunnus() + 1;
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO Alue VALUES ("
-                + uusiTunnus + ", '" + nimi + "');"
+                "INSERT INTO Alue VALUES (?, ?);"
         );
 
-//        stmt.setObject(1, nimi);
+        stmt.setObject(1, uusiTunnus);
+        stmt.setObject(2, nimi);
+        
         stmt.execute();
         stmt.close();
         connection.close();

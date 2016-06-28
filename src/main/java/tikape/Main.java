@@ -9,7 +9,7 @@ import tikape.database.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//        testi2();
+//        testi();
         ville();
         kuunteleOsoitteetAlueille();
     }
@@ -99,17 +99,13 @@ public class Main {
     public static void testi() throws Exception {
         Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
         AlueDao alueDao = new AlueDao(database);
-        List<Viestiketju> ketjut = alueDao.findKetjut(2);
-
-        for (Viestiketju vk : ketjut) {
-            System.out.println(vk);
-        }
+        System.out.println(alueDao.findOne(1));
     }
 
     public static void testi2() throws Exception {
         Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
         ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
-        System.out.println(viestiketjuDao.findUusimmanViestinAjankohta(1));
+        System.out.println(viestiketjuDao.findAll(1));
     }
 
     public static void esimerkki() throws Exception {

@@ -51,8 +51,10 @@ public class ViestiketjuDao {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
                 + "FROM Viestiketju "
-                        + "WHERE alue = " + a + ";"
+                + "WHERE alue = ?;"
         );
+        
+        stmt.setObject(1, a);
 
         ResultSet rs = stmt.executeQuery();
         List<Viestiketju> viestiketjut = new ArrayList<>();
@@ -103,7 +105,7 @@ public class ViestiketjuDao {
         stmt.close();
         connection.close();
     }
-    
+
     public int findLargestTunnus() throws SQLException {
 //        Connection connection = database.getConnection();
 //        PreparedStatement stmt = connection.prepareStatement(
@@ -116,7 +118,7 @@ public class ViestiketjuDao {
 //
 //        stmt.close();
 //        connection.close();
-        
+
         return 0;
     }
 
@@ -167,7 +169,7 @@ public class ViestiketjuDao {
         ResultSet rs = stmt.executeQuery();
 
         String luomisaika = rs.getString("luomisaika");
-        
+
         rs.close();
         stmt.close();
         connection.close();
