@@ -9,18 +9,18 @@ import tikape.database.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//        testi2();
-        Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
-        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
-        AlueDao alueDao = new AlueDao(database);
-        ViestiDao viestiDao = new ViestiDao(database);
+        testi();
+//        Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
+//        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
+//        AlueDao alueDao = new AlueDao(database);
+//        ViestiDao viestiDao = new ViestiDao(database);
+//        
+//        Sovellus sovellus = new Sovellus(database, viestiketjuDao, alueDao, viestiDao);
+//        
+//        sovellus.alueet();
         
-        Sovellus sovellus = new Sovellus(database, viestiketjuDao, alueDao, viestiDao);
-        
-        sovellus.alueet();
-        
-//        ville();
-//        kuunteleOsoitteetAlueille();
+////        ville();
+////        kuunteleOsoitteetAlueille();
     }
 
     public static void ville() throws Exception {
@@ -108,11 +108,7 @@ public class Main {
     public static void testi() throws Exception {
         Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
         AlueDao alueDao = new AlueDao(database);
-        List<Viestiketju> ketjut = alueDao.findKetjut(2);
-
-        for (Viestiketju vk : ketjut) {
-            System.out.println(vk);
-        }
+        System.out.println(alueDao.findViimeisimmanViestinAika(1));
     }
 
     public static void testi2() throws Exception {

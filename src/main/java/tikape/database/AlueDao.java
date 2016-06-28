@@ -92,7 +92,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         stmt.setObject(1, uusiTunnus);
         stmt.setObject(2, nimi);
-        
+
         stmt.execute();
         stmt.close();
         connection.close();
@@ -118,7 +118,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
             viestiketjut.add(new Viestiketju(tunnus, alue, otsikko, luomisaika));
         }
-        
+
         rs.close();
         stmt.close();
         connection.close();
@@ -129,7 +129,7 @@ public class AlueDao implements Dao<Alue, Integer> {
     public int findKetjujenMaara(int alue) throws SQLException {
         return findKetjut(alue).size();
     }
-    
+
     public int findSuurinTunnus() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
@@ -147,7 +147,48 @@ public class AlueDao implements Dao<Alue, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-        
+
         return suurin;
+    }
+
+    public List<Viesti> findViestit(int alue) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT v.tunnus, v.ketju, v.kayttaja, v.luomisaika, v.sisalto "
+                + "FROM Alue a, Viesti v, Viestiketju vk "
+                + "WHERE a.tunnus = vk.alue "
+                + "AND vk.tunnus = v.ketju "
+                + "AND a.tunnus = ? "
+                + "ORDER BY v.luomisaika DESC;"
+        );
+
+        stmt.setObject(1, alue);
+
+        ResultSet rs = stmt.executeQuery();
+        List<Viesti> viestit = new ArrayList<>();
+
+        while (rs.next()) {
+            int tunnus = rs.getInt("tunnus");
+            int ketju = rs.getInt("ketju");
+            String kayttaja = rs.getString("kayttaja");
+            String luomisaika = rs.getString("luomisaika");
+            String sisalto = rs.getString("sisalto");
+
+            viestit.add(new Viesti(tunnus, ketju, kayttaja, sisalto, luomisaika));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return viestit;
+    }
+    
+    public int findViestienMaara(int alue) throws SQLException {
+        return this.findViestit(alue).size();
+    }
+    
+    public String findViimeisimmanViestinAika(int alue) throws SQLException {
+        return this.findViestit(alue).get(0).getLuomisaika();
     }
 }
