@@ -9,9 +9,18 @@ import tikape.database.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//        testi();
-        ville();
-        kuunteleOsoitteetAlueille();
+//        testi2();
+        Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
+        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
+        AlueDao alueDao = new AlueDao(database);
+        ViestiDao viestiDao = new ViestiDao(database);
+        
+        Sovellus sovellus = new Sovellus(database, viestiketjuDao, alueDao, viestiDao);
+        
+        sovellus.alueet();
+        
+//        ville();
+//        kuunteleOsoitteetAlueille();
     }
 
     public static void ville() throws Exception {
@@ -99,13 +108,17 @@ public class Main {
     public static void testi() throws Exception {
         Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
         AlueDao alueDao = new AlueDao(database);
-        System.out.println(alueDao.findOne(1));
+        List<Viestiketju> ketjut = alueDao.findKetjut(2);
+
+        for (Viestiketju vk : ketjut) {
+            System.out.println(vk);
+        }
     }
 
     public static void testi2() throws Exception {
         Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
         ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
-        System.out.println(viestiketjuDao.findAll(1));
+        System.out.println(viestiketjuDao.findUusimmanViestinAjankohta(1));
     }
 
     public static void esimerkki() throws Exception {
@@ -136,3 +149,4 @@ public class Main {
         }, new ThymeleafTemplateEngine());
     }
 }
+
