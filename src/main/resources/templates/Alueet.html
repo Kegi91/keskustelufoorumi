@@ -1,0 +1,34 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>SupermegaFoorumi</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1>SupermegaFoorumi</h1>
+        <h3 th:text="${viesti}"></h3>
+
+        <table>
+            <tr>
+                <th align="left">Alue</th>
+                <th align="left">Viestejä yhteensä</th>
+                <th align="left">Viimeisin viesti</th>
+            </tr>
+            <tr th:each="Alue: ${alueet}">
+                <td><a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
+                <td>666 (ei vielä implementoitu tietokantaan)</td>
+                <td>(ei vielä implementoitu tietokantaan)</td>
+            </tr>
+        </table>
+        <br/>
+        
+        <form method="POST" action="/alueet">
+            <i>Luo uusi alue:</i><br/>
+            <input type="text" name="alueNimi"/><br/>
+            <input type="submit" value="Ok"/>
+        </form>
+
+    </body>
+</html>

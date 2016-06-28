@@ -21,21 +21,20 @@ public class AlueDao implements Dao<Alue, Integer> {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
                 + "FROM Alue "
-                + "WHERE tunnus = ?;"
+                + "WHERE tunnus = '" + key + "';"
         );
 
-        stmt.setObject(1, key);
+//        stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
 
         if (!rs.next()) {
             return null;
         }
 
-        String alue;
-        int alue_tunnus = rs.getInt("tunnus");
+        int tunnus = rs.getInt("tunnus");
         String nimi = rs.getString("nimi");
 
-        Alue a = new Alue(alue_tunnus, nimi);
+        Alue a = new Alue(tunnus, nimi);
 
         rs.close();
         stmt.close();
@@ -85,15 +84,15 @@ public class AlueDao implements Dao<Alue, Integer> {
     }
 
     public void insert(String nimi) throws SQLException {
+        int uusiTunnus = findSuurinTunnus() + 1;
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO Alue (nimi)"
-                + "VALUES (?);"
+                "INSERT INTO Alue VALUES ("
+                + uusiTunnus + ", '" + nimi + "');"
         );
 
-        stmt.setObject(1, nimi);
+//        stmt.setObject(1, nimi);
         stmt.execute();
-
         stmt.close();
         connection.close();
     }
@@ -128,5 +127,26 @@ public class AlueDao implements Dao<Alue, Integer> {
 
     public int findKetjujenMaara(int alue) throws SQLException {
         return findKetjut(alue).size();
+    }
+    
+    public int findSuurinTunnus() throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT MAX(tunnus) "
+                + "FROM Alue;"
+        );
+
+        ResultSet rs = stmt.executeQuery();
+
+        int suurin = 0;
+        if (rs.next()) {
+            suurin = rs.getInt("MAX(tunnus)");
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+        
+        return suurin;
     }
 }

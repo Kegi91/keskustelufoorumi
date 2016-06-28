@@ -2,15 +2,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Otsikko</title>
+        <title>SupermegaChat</title>
         <meta charset="utf-8" />
     </head>
 
     <body>
-        <h1>Heippa vaan!</h1>
+        <h1>SupermegaChat</h1>
 
-        <p>Ja .. <span th:text="${viesti}">jotain?</span></p>
+        <form method="POST" action="/viestiketju">
+            Nimi:<br/>
+            <input type="text" name="kayttaja"/><br/>
+            Viesti:<br/>
+            <input type="text" name="sisalto"/><br/>
+            <input type="submit" value="Lähetä"/>
+        </form>
 
-        <p><a href="/opiskelijat">Tästä opiskelijalistaukseen.</a></p>
+        <br/>
+        <h2 th:text="${haloo}"></h2>
+        <br/>
+
+        <!--            <ul style="list-style-type:none">
+                        <li th:each="String: ${viestit}">
+                            <span th:text="${String}">1</span>
+                        </li>
+                    </ul>-->
+
+        <table>
+
+            <tr>
+                <th align="left">Käyttäjä</th>
+                <th align="left">Viesti</th>
+                <th align="left">Luomisaika</th>
+            </tr>
+            <tr th:each="Viesti: ${viestit}">
+                <td th:text="${Viesti.kayttaja}"></td>
+                <td th:text="${Viesti.sisalto}"></td>
+                <td th:text="${Viesti.luomisaika}"></td>
+            </tr>
+
+        </table>
+
+
     </body>
 </html>

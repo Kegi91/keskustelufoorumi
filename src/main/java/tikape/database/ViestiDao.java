@@ -7,16 +7,16 @@ import java.sql.*;
  *
  * @author kujuku
  */
-public class ViestiketjuDao {
+public class ViestiDao implements Dao<Viesti, Integer> {
 
     private Database database;
 
-    public ViestiketjuDao(Database database) {
+    public ViestiDao(Database database) {
         this.database = database;
     }
 
-//    @Override
-    public Viestiketju findOne(Integer key) throws SQLException {
+    @Override
+    public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
@@ -32,11 +32,12 @@ public class ViestiketjuDao {
         }
 
         int tunnus = rs.getInt("tunnus");
-        int alue = rs.getInt("alue");
-        String otsikko = rs.getString("otsikko");
+        int ketju = rs.getInt("alue");
+        String kayttaja = rs.getString("otsikko");
         String luomisaika = rs.getString("luomisaika");
+        String sisalto = rs.getString("sisalto");
 
-        Viestiketju v = new Viestiketju(tunnus, alue, otsikko, luomisaika);
+        Viesti v = new Viesti(tunnus, ketju, kayttaja, luomisaika, sisalto);
 
         rs.close();
         stmt.close();
@@ -45,39 +46,40 @@ public class ViestiketjuDao {
         return v;
     }
 
-//    @Override
-    public List<Viestiketju> findAll(int a) throws SQLException {
+    @Override
+    public List<Viesti> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
-                + "FROM Viestiketju "
-                        + "WHERE alue = " + a + ";"
+                + "FROM Viesti;"
         );
 
         ResultSet rs = stmt.executeQuery();
-        List<Viestiketju> viestiketjut = new ArrayList<>();
+        List<Viesti> viestit = new ArrayList<>();
 
         while (rs.next()) {
             int tunnus = rs.getInt("tunnus");
-            int alue = rs.getInt("alue");
-            String otsikko = rs.getString("otsikko");
+            int ketju = rs.getInt("ketju");
+            String kayttaja = rs.getString("kayttaja");
+            String sisalto = rs.getString("sisalto");
             String luomisaika = rs.getString("luomisaika");
 
-            viestiketjut.add(new Viestiketju(tunnus, alue, otsikko, luomisaika));
+            viestit.add(new Viesti(tunnus, ketju, kayttaja, sisalto, luomisaika));
         }
 
         rs.close();
         stmt.close();
         connection.close();
 
-        return viestiketjut;
+        Collections.reverse(viestit);
+        return viestit;
     }
 
-//    @Override
+    @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                "DELETE FROM Viestiketju "
+                "DELETE FROM Viesti "
                 + "WHERE tunnus = ?;"
         );
 
@@ -88,70 +90,71 @@ public class ViestiketjuDao {
         connection.close();
     }
 
-    public void insert(int alue, String otsikko) throws SQLException {
+    public void insert(int ketju, String kayttaja, String sisalto) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement(
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(
                 "INSERT INTO "
-                + "Viestiketju (alue, otsikko, luomisaika)"
-                + "VALUES (?, ?, DATETIME('now','localtime'));"
+                + "Viesti (tunnus, ketju, kayttaja, sisalto, luomisaika)"
+                + "VALUES (" + ketju + ", '" + kayttaja + "', '" + kayttaja + "', 'jipii', DATETIME('now','localtime'), '" + sisalto + "');"
         );
 
-        stmt.setObject(1, alue);
-        stmt.setObject(2, otsikko);
-        stmt.execute();
+//        stmt.setObject(1, alue);
+//        stmt.setObject(2, otsikko);
+//        stmt.execute();
 
         stmt.close();
         connection.close();
     }
     
     public int findLargestTunnus() throws SQLException {
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement(
-//                "SELECT MAX(tunnus) FROM Viestiketju;"
-//        );
-//
-//        stmt.setObject(1, alue);
-//        stmt.setObject(2, otsikko);
-//        stmt.execute();
-//
-//        stmt.close();
-//        connection.close();
-        
-        return 0;
-    }
-
-    public List<Viestiketju> findViestit(int ketju) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                "SELECT * "
-                + "FROM Viesti WHERE ketju = ? "
-                + "ORDER BY luomisaika DESC;"
+                "SELECT MAX(tunnus) FROM Viesti;"
         );
 
-        stmt.setObject(1, ketju);
+//        stmt.setObject(1, alue);
+//        stmt.setObject(2, otsikko);
         ResultSet rs = stmt.executeQuery();
+        int suurin = rs.getInt("MAX(tunnus)");
 
-        List<Viestiketju> viestit = new ArrayList<>();
-
-        while (rs.next()) {
-            int tunnus = rs.getInt("tunnus");
-            int alue = rs.getInt("alue");
-            String luomisaika = rs.getString("luomisaika");
-            String otsikko = rs.getString("otsikko");
-
-            viestit.add(new Viestiketju(tunnus, alue, otsikko, luomisaika));
-        }
-
-        rs.close();
         stmt.close();
         connection.close();
-
-        return viestit;
+        
+        return suurin;
     }
 
-    public int findViestienMaara(int ketju) throws SQLException {
-        return findViestit(ketju).size();
-    }
+//    public List<Viesti> findViestit(int ketju) throws SQLException {
+//        Connection connection = database.getConnection();
+//        PreparedStatement stmt = connection.prepareStatement(
+//                "SELECT * "
+//                + "FROM Viesti WHERE ketju = ? "
+//                + "ORDER BY luomisaika DESC;"
+//        );
+//
+//        stmt.setObject(1, ketju);
+//        ResultSet rs = stmt.executeQuery();
+//
+//        List<Viesti> viestit = new ArrayList<>();
+//
+//        while (rs.next()) {
+//            String kayttaja = rs.getString("kayttaja");
+//            String luomisaika = rs.getString("luomisaika");
+//            String sisalto = rs.getString("sisalto");
+//
+//            viestit.add(new Viesti(ketju, kayttaja, luomisaika, sisalto));
+//        }
+//
+//        rs.close();
+//        stmt.close();
+//        connection.close();
+//
+//        return viestit;
+//    }
+
+//    public int findViestienMaara(int ketju) throws SQLException {
+//        return findViestit(ketju).size();
+//    }
 
     public String findUusimmanViestinAjankohta(int ketju) throws SQLException {
         Connection connection = database.getConnection();

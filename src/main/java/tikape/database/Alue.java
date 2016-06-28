@@ -28,6 +28,10 @@ public class Alue {
     public void setNimi(String nimi) {
         this.nimi = nimi;
     }
+    
+    public String getOsoite() {
+        return "alue/" + this.tunnus;
+    }
 
     @Override
     public String toString() {

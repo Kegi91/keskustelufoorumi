@@ -49,6 +49,10 @@ public class Viestiketju {
         this.luomisaika = luomisaika;
     }
 
+    public String getOsoite() {
+        return "viestiketju/" + this.tunnus;
+    }
+
     @Override
     public String toString() {
         return this.otsikko;
