@@ -18,7 +18,7 @@
             </tr>
             <tr th:each="Alue: ${alueet}">
                 <td><a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
-                <td>666 (ei vielä implementoitu tietokantaan)</td>
+                <td><a th:text="${alueDao.findViestienMaara(Alue.getTunnus())}">asd</a></td>
                 <td>(ei vielä implementoitu tietokantaan)</td>
             </tr>
         </table>
