@@ -7,22 +7,24 @@ import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Sovellus {
+
     private Database database;
     private ViestiketjuDao viestiketjuDao;
     private AlueDao alueDao;
     private ViestiDao viestiDao;
-    
+
     public Sovellus(Database database, ViestiketjuDao viestiketjuDao, AlueDao alueDao, ViestiDao viestiDao) {
         this.database = database;
         this.viestiketjuDao = viestiketjuDao;
         this.alueDao = alueDao;
         this.viestiDao = viestiDao;
     }
-    
+
     public void alueet() throws Exception {
-         get("/alueet", (req, res) -> {
+        get("/alueet", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("alueet", alueDao.findAll());
+            map.put("alueDao", alueDao);
 
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
@@ -38,10 +40,10 @@ public class Sovellus {
 
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
-        
+
         this.kuunteleOsoitteetAlueille();
     }
-    
+
     public void kuunteleUusiOsoite() throws Exception {
         int uusiAlue = alueDao.findSuurinTunnus();
         get("/alue/" + uusiAlue, (req, res) -> {
@@ -51,7 +53,7 @@ public class Sovellus {
             return new ModelAndView(map, "Alue");
         }, new ThymeleafTemplateEngine());
     }
-    
+
     public void kuunteleOsoitteetAlueille() throws Exception {
 //        for (Viesti viesti : viestiDao.findAll()) {
 //            get("/viestiketju/" + , (req, res) -> {
