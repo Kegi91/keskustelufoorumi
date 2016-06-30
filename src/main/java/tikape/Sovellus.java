@@ -1,6 +1,6 @@
 package tikape;
 
-import tikape.domain.Alue;
+import tikape.domain.*;
 import tikape.database.*;
 import java.util.*;
 import spark.ModelAndView;
@@ -43,6 +43,7 @@ public class Sovellus {
         }, new ThymeleafTemplateEngine());
 
         this.kuunteleOsoitteetAlueille();
+        this.kuunteleOsoitteetViestiketjuille();
     }
 
     public void kuunteleUusiOsoite() throws Exception {
@@ -73,6 +74,21 @@ public class Sovellus {
                 map.put("viestiketjut", viestiketjuDao.findAll(alueTunnus));
                 map.put("viestiketjuDao", viestiketjuDao);
                 return new ModelAndView(map, "Alue");
+            }, new ThymeleafTemplateEngine());
+        }
+    }
+
+    public void kuunteleOsoitteetViestiketjuille() throws Exception {
+        for (Viestiketju viestiketju : viestiketjuDao.findAll()) {
+            int ketju = viestiketju.getTunnus();
+            int alue = viestiketju.getAlue();
+            get("/alue/" + alue + "/viestiketju/" + ketju, (req, res) -> {
+                HashMap map = new HashMap<>();
+                map.put("aluenimi", alueDao.findOne(alue).getNimi());
+                map.put("ketjunnimi", viestiketju.getOtsikko());
+                map.put("viestit", viestiketjuDao.findViestit(ketju));
+                map.put("viestiDao", viestiDao);
+                return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
         }
     }
