@@ -38,7 +38,8 @@ public class Sovellus {
             HashMap map = new HashMap<>();
             map.put("viesti", "Lisätty alue: " + alueenNimi);
             map.put("alueet", alueDao.findAll());
-
+            map.put("alueDao", alueDao);
+            
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
 

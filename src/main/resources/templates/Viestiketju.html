@@ -11,16 +11,16 @@
         <h4 th:text="${aluenimi}">Alue X:</h4>
         <h3 th:text="${ketjunnimi}">Ketju Y:</h3>
         
-        <table>
+        <table style="width:100%">
             <tr>
                 <th align="left">Käyttäjä</th>
                 <th align="left">Viesti</th>
                 <th align="left">Luomisaika</th>
             </tr>
-            <tr th:each="Viestit: ${viestit}">
+            <tr th:each="Viesti: ${viestit}">
                 <td><a th:text="${Viesti.getKayttaja()}">kayttaja</a></td>
-                <td><a th:text="${Viesti.toString}">viesti</a></td>
-                <td>odottaa implementointia</td>
+                <td><a th:text="${Viesti.toString()}">viesti</a></td>
+                <td><a th:text="${Viesti.getLuomisaika()}">luomisaika</a></td>
             </tr>
         </table>
         <br/>

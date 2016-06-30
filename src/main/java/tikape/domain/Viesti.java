@@ -61,7 +61,7 @@ public class Viesti {
 
     @Override
     public String toString() {
-        return this.kayttaja + ": " + this.sisalto;
+        return this.sisalto;
     }
     
     
