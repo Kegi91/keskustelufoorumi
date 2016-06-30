@@ -76,6 +76,32 @@ public class ViestiketjuDao {
 
         return viestiketjut;
     }
+    
+    public List<Viestiketju> findAll() throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT * "
+                + "FROM Viestiketju;"
+        );
+
+        ResultSet rs = stmt.executeQuery();
+        List<Viestiketju> viestiketjut = new ArrayList<>();
+
+        while (rs.next()) {
+            int tunnus = rs.getInt("tunnus");
+            int alue = rs.getInt("alue");
+            String otsikko = rs.getString("otsikko");
+            String luomisaika = rs.getString("luomisaika");
+
+            viestiketjut.add(new Viestiketju(tunnus, alue, otsikko, luomisaika));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return viestiketjut;
+    }
 
 //    @Override
     public void delete(Integer key) throws SQLException {
