@@ -169,6 +169,10 @@ public class ViestiketjuDao {
 
         stmt.setObject(1, ketju);
         ResultSet rs = stmt.executeQuery();
+        
+        if (!rs.next()) {
+            return "-";
+        }
 
         String luomisaika = rs.getString("luomisaika");
 
