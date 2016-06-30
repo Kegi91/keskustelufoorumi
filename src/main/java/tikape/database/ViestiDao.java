@@ -93,21 +93,29 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
     public void insert(int ketju, String kayttaja, String sisalto) throws SQLException {
         Connection connection = database.getConnection();
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate(
-                "INSERT INTO "
-                + "Viesti (tunnus, ketju, kayttaja, sisalto, luomisaika)"
-                + "VALUES (" + ketju + ", '" + kayttaja + "', '" + kayttaja + "', 'jipii', DATETIME('now','localtime'), '" + sisalto + "');"
-        );
+        PreparedStatement stmt;
 
-//        stmt.setObject(1, alue);
-//        stmt.setObject(2, otsikko);
-//        stmt.execute();
+        if (!this.database.onPostgre()) {
+            stmt = connection.prepareStatement(
+                    "INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika)"
+                    + "VALUES (?, ?, ?, DATETIME('now','localtime'));"
+            );
+        } else {
+            stmt = connection.prepareStatement(
+                    "INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika)"
+                    + "VALUES (?, ?, ?, current_timestamp(1));"
+            );
+        }
 
+        stmt.setObject(1, ketju);
+        stmt.setObject(2, kayttaja);
+        stmt.setObject(3, sisalto);
+        stmt.execute();
+        
         stmt.close();
         connection.close();
     }
-    
+
     public int findLargestTunnus() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
@@ -121,7 +129,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
         stmt.close();
         connection.close();
-        
+
         return suurin;
     }
 
@@ -152,11 +160,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 //
 //        return viestit;
 //    }
-
 //    public int findViestienMaara(int ketju) throws SQLException {
 //        return findViestit(ketju).size();
 //    }
-
     public String findUusimmanViestinAjankohta(int ketju) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
@@ -171,7 +177,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         ResultSet rs = stmt.executeQuery();
 
         String luomisaika = rs.getString("luomisaika");
-        
+
         rs.close();
         stmt.close();
         connection.close();

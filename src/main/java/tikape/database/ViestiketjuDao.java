@@ -55,7 +55,7 @@ public class ViestiketjuDao {
                 + "FROM Viestiketju "
                 + "WHERE alue = ?;"
         );
-        
+
         stmt.setObject(1, a);
 
         ResultSet rs = stmt.executeQuery();
@@ -76,7 +76,7 @@ public class ViestiketjuDao {
 
         return viestiketjut;
     }
-    
+
     public List<Viestiketju> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
@@ -120,11 +120,21 @@ public class ViestiketjuDao {
 
     public void insert(int alue, String otsikko) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO "
-                + "Viestiketju (alue, otsikko, luomisaika)"
-                + "VALUES (?, ?, DATETIME('now','localtime'));"
-        );
+        PreparedStatement stmt;
+        
+        if (!database.onPostgre()) {
+            stmt = connection.prepareStatement(
+                    "INSERT INTO "
+                    + "Viestiketju (alue, otsikko, luomisaika)"
+                    + "VALUES (?, ?, DATETIME('now','localtime'));"
+            );
+        } else {
+            stmt = connection.prepareStatement(
+                    "INSERT INTO "
+                    + "Viestiketju (alue, otsikko, luomisaika)"
+                    + "VALUES (?, ?, current_timestamp(1));"
+            );
+        }
 
         stmt.setObject(1, alue);
         stmt.setObject(2, otsikko);
@@ -195,7 +205,7 @@ public class ViestiketjuDao {
 
         stmt.setObject(1, ketju);
         ResultSet rs = stmt.executeQuery();
-        
+
         if (!rs.next()) {
             return "-";
         }

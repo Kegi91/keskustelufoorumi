@@ -10,15 +10,25 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 //        testi2();
-        Database database = new Database("jdbc:sqlite:keskustelupalsta.db");
+        if (System.getenv("PORT") != null) {
+            port(Integer.valueOf(System.getenv("PORT")));
+        }
+
+        String jdbcOsoite = "jdbc:sqlite:keskustelupalsta.db";
+
+        if (System.getenv("DATABASE_URL") != null) {
+            jdbcOsoite = System.getenv("DATABASE_URL");
+        }
+
+        Database database = new Database(jdbcOsoite);
         ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
         AlueDao alueDao = new AlueDao(database);
         ViestiDao viestiDao = new ViestiDao(database);
-        
+
         Sovellus sovellus = new Sovellus(database, viestiketjuDao, alueDao, viestiDao);
-        
+
         sovellus.alueet();
-        
+
 //        ville();
 //        kuunteleOsoitteetAlueille();
     }
@@ -28,7 +38,6 @@ public class Main {
 //        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
 //        AlueDao alueDao = new AlueDao(database);
 //        ViestiDao viestiDao = new ViestiDao(database);
-
 //        get("/viestiketju", (req, res) -> {
 //            HashMap map = new HashMap<>();
 //            map.put("viestit", viestiDao.findAll());
@@ -85,7 +94,6 @@ public class Main {
 //        ViestiketjuDao viestiketjuDao = new ViestiketjuDao(database);
 //        AlueDao alueDao = new AlueDao(database);
 //        ViestiDao viestiDao = new ViestiDao(database);
-
 //        for (Viesti viesti : viestiDao.findAll()) {
 //            get("/viestiketju/" + , (req, res) -> {
 //                HashMap map = new HashMap<>();
@@ -149,4 +157,3 @@ public class Main {
 //        }, new ThymeleafTemplateEngine());
 //    }
 }
-
