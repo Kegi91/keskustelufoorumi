@@ -50,7 +50,7 @@ public class Viestiketju {
     }
 
     public String getOsoite() {
-        return "viestiketju/" + this.tunnus;
+        return "/alue/" + this.alue + "/viestiketju/" + this.tunnus;
     }
 
     @Override
