@@ -10,7 +10,7 @@
         <h1>SupermegaFoorumi</h1>
         <h3 th:text="${aluenimi}">Alue X:</h3>
         
-        <table>
+        <table style="width:100%">
             <tr>
                 <th align="left">Otsikko</th>
                 <th align="left">Viestejä</th>
@@ -18,8 +18,8 @@
             </tr>
             <tr th:each="Viestiketju: ${viestiketjut}">
                 <td><a th:href="${Viestiketju.getOsoite()}" th:text="${Viestiketju.getOtsikko()}">sdfjöosd</a></td>
-                <td>odottaa implementointia</td>
-                <td>odottaa implementointia</td>
+                <td><a th:text="${viestiketjuDao.findViestienMaara(Viestiketju.getTunnus())}">asldk</a></td>
+                <td><a th:text="${viestiketjuDao.findUusimmanViestinAjankohta(Viestiketju.getTunnus())}">asldk</a></td>
             </tr>
         </table>
         <br/>

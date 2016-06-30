@@ -1,5 +1,6 @@
 package tikape.database;
 
+import tikape.domain.Viesti;
 import java.util.*;
 import java.sql.*;
 

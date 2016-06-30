@@ -10,7 +10,7 @@
         <h1>SupermegaFoorumi</h1>
         <h3 th:text="${viesti}"></h3>
 
-        <table>
+        <table style="width:100%">
             <tr>
                 <th align="left">Alue</th>
                 <th align="left">Viestejä yhteensä</th>
@@ -19,7 +19,7 @@
             <tr th:each="Alue: ${alueet}">
                 <td><a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
                 <td><a th:text="${alueDao.findViestienMaara(Alue.getTunnus())}">asd</a></td>
-                <td>(ei vielä implementoitu tietokantaan)</td>
+                <td><a th:text="${alueDao.findViimeisimmanViestinAika(Alue.getTunnus())}">sldk</a></td>
             </tr>
         </table>
         <br/>

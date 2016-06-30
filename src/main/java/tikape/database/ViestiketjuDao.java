@@ -1,5 +1,7 @@
 package tikape.database;
 
+import tikape.domain.Viestiketju;
+import tikape.domain.Viesti;
 import java.util.*;
 import java.sql.*;
 
@@ -122,7 +124,7 @@ public class ViestiketjuDao {
         return 0;
     }
 
-    public List<Viestiketju> findViestit(int ketju) throws SQLException {
+    public List<Viesti> findViestit(int ketju) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
@@ -133,15 +135,15 @@ public class ViestiketjuDao {
         stmt.setObject(1, ketju);
         ResultSet rs = stmt.executeQuery();
 
-        List<Viestiketju> viestit = new ArrayList<>();
+        List<Viesti> viestit = new ArrayList<>();
 
         while (rs.next()) {
             int tunnus = rs.getInt("tunnus");
-            int alue = rs.getInt("alue");
             String luomisaika = rs.getString("luomisaika");
-            String otsikko = rs.getString("otsikko");
+            String kayttaja = rs.getString("kayttaja");
+            String sisalto = rs.getString("sisalto");
 
-            viestit.add(new Viestiketju(tunnus, alue, otsikko, luomisaika));
+            viestit.add(new Viesti(tunnus, ketju, kayttaja, sisalto, luomisaika));
         }
 
         rs.close();

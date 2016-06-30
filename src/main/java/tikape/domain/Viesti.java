@@ -1,4 +1,4 @@
-package tikape.database;
+package tikape.domain;
 
 /**
  *

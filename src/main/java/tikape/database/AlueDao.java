@@ -1,5 +1,8 @@
 package tikape.database;
 
+import tikape.domain.Viestiketju;
+import tikape.domain.Viesti;
+import tikape.domain.Alue;
 import java.util.*;
 import java.sql.*;
 
@@ -183,12 +186,16 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return viestit;
     }
-    
+
     public int findViestienMaara(int alue) throws SQLException {
         return this.findViestit(alue).size();
     }
-    
+
     public String findViimeisimmanViestinAika(int alue) throws SQLException {
-        return this.findViestit(alue).get(0).getLuomisaika();
+        if (this.findViestit(alue).size() > 0) {
+            return this.findViestit(alue).get(0).getLuomisaika();
+        }
+        
+        return "-";
     }
 }

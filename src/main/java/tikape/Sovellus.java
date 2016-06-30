@@ -1,5 +1,6 @@
 package tikape;
 
+import tikape.domain.Alue;
 import tikape.database.*;
 import java.util.*;
 import spark.ModelAndView;
@@ -50,6 +51,7 @@ public class Sovellus {
             HashMap map = new HashMap<>();
             map.put("aluenimi", alueDao.findOne(uusiAlue).getNimi());
             map.put("viestiketjut", viestiketjuDao.findAll(uusiAlue));
+            map.put("viestiketjuDao", viestiketjuDao);
             return new ModelAndView(map, "Alue");
         }, new ThymeleafTemplateEngine());
     }
@@ -69,6 +71,7 @@ public class Sovellus {
                 HashMap map = new HashMap<>();
                 map.put("aluenimi", alue.getNimi());
                 map.put("viestiketjut", viestiketjuDao.findAll(alueTunnus));
+                map.put("viestiketjuDao", viestiketjuDao);
                 return new ModelAndView(map, "Alue");
             }, new ThymeleafTemplateEngine());
         }
