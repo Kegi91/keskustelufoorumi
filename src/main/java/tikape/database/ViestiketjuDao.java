@@ -132,7 +132,7 @@ public class ViestiketjuDao {
             stmt = connection.prepareStatement(
                     "INSERT INTO "
                     + "Viestiketju (alue, otsikko, luomisaika)"
-                    + "VALUES (?, ?, current_timestamp(1));"
+                    + "VALUES (?, ?, current_timestamp(0));"
             );
         }
 

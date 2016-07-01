@@ -104,7 +104,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         } else {
             stmt = connection.prepareStatement(
                     "INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika)"
-                    + "VALUES (?, ?, ?, current_timestamp(1));"
+                    + "VALUES (?, ?, ?, current_timestamp(0));"
             );
         }
 
