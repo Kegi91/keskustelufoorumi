@@ -95,6 +95,7 @@ public class Sovellus {
         map.put("ketjuosoite", ketju.getTunnus());
         map.put("viestit", viestiketjuDao.findViestit(ketju.getTunnus()));
         map.put("viestiDao", viestiDao);
+        map.put("alueosoite", "/alue/" + alue);
     }
 
     public void kuunteleOsoitteetViestiketjuille() throws Exception {
