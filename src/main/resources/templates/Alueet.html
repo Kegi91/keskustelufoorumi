@@ -8,34 +8,23 @@
 
     <body>
         <h1>SupermegaFoorumi</h1>
-        <h3 th:text="${viestiKayttajalle}"></h3>
+        <h4 th:text="${eiTyhjaaAluetta}"></h4>
+        <h4 th:text="${viestiKayttajalle}"></h4>
 
         <table style="width:100%">
             <tr>
-                <th align="left" style="font-size:130%;">Alue</th>
-                <th align="left" style="font-size:130%;">Ketjujen määrä</th>
-                <th align="left" style="font-size:130%;">Viestejä yhteensä</th>
-                <th align="left" colspan="3" style="font-size:130%;">Viimeisin viesti</th>
-            </tr>
-            <tr>
-                <th align="left"></th>
-                <th align="left"></th>
-                <th align="left"></th>
-                <th align="left">Ajankohta</th>
-                <th align="left">Kirjoittaja</th>
-                <th align="left">Ketju</th>
+                <th align="left">Alue</th>
+                <th align="left">Viestejä yhteensä</th>
+                <th align="left">Viimeisin viesti</th>
             </tr>
             <tr th:each="Alue: ${alueet}">
-                <td><a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
-                <td><a th:text="${alueDao.findKetjujenMaara(Alue.getTunnus())}">asd</a></td>
+                <td>- <a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
                 <td><a th:text="${alueDao.findViestienMaara(Alue.getTunnus())}">asd</a></td>
                 <td><a th:text="${alueDao.findViimeisimmanViestinAika(Alue.getTunnus())}">sldk</a></td>
-                <td><a th:text="${alueDao.findViimeisimmanViestinKayttaja(Alue.getTunnus())}">sldk</a></td>
-                <td><a th:text="${alueDao.findViimeisimmanViestinKetju(Alue.getTunnus())}">sldk</a></td>
             </tr>
         </table>
         <br/>
-
+        
         <form method="POST" action="/alueet">
             <i>Luo uusi alue:</i><br/>
             <input type="text" name="alueNimi"/><br/>

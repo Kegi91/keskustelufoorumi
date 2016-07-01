@@ -27,7 +27,7 @@ public class Main {
 
         Sovellus sovellus = new Sovellus(database, viestiketjuDao, alueDao, viestiDao);
 
-        sovellus.alueet();
+        sovellus.kaynnista();
 
 //        ville();
 //        kuunteleOsoitteetAlueille();

@@ -21,7 +21,13 @@ public class Sovellus {
         this.viestiDao = viestiDao;
     }
 
-    public void alueet() throws Exception {
+    public void kaynnista() throws Exception {
+        kuuntelePaasivunOsoite();
+        kuunteleOsoitteetAlueille();
+        kuunteleOsoitteetViestiketjuille();
+    }
+
+    public void kuuntelePaasivunOsoite() throws Exception {
         get("/alueet", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("alueet", alueDao.findAll());
@@ -30,103 +36,108 @@ public class Sovellus {
         }, new ThymeleafTemplateEngine());
 
         post("/alueet", (req, res) -> {
-            String alueNimi = req.queryParams("alueNimi");
-            if (!alueNimi.isEmpty()) {
-                alueDao.insert(alueNimi);
-            }
-            kuunteleOsoiteUudelleAlueelle();
-
+            String uudenAlueenNimi = req.queryParams("alueNimi");
             HashMap map = new HashMap<>();
-            map.put("viestiKayttajalle", "Lisätty alue: " + alueNimi);
+
+            if (!uudenAlueenNimi.isEmpty()) {
+                alueDao.insert(uudenAlueenNimi);
+                map.put("viestiKayttajalle", "Lisätty alue: \"" + uudenAlueenNimi + "\"");
+                kuunteleOsoitteetAlueille();
+//                kuunteleOsoiteUudelleAlueelle();
+            } else {
+                map.put("eiTyhjaaAluetta", "Alueen nimi ei saa olla tyhjä");
+            }
+
             map.put("alueet", alueDao.findAll());
             map.put("alueDao", alueDao);
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
-
-        this.kuunteleOsoitteetAlueille();
-        this.kuunteleOsoitteetViestiketjuille();
     }
 
-    public void kuunteleOsoiteUudelleAlueelle() throws Exception {
-        int uudenAlueenTunnus = alueDao.findSuurinTunnus();
-        get("/alue/" + uudenAlueenTunnus, (req, res) -> {
-            HashMap map = new HashMap<>();
-            map.put("aluenimi", alueDao.findOne(uudenAlueenTunnus).getNimi());
-            map.put("alueosoite", uudenAlueenTunnus);
-            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
-            map.put("viestiketjuDao", viestiketjuDao);
-            return new ModelAndView(map, "Alue");
-        }, new ThymeleafTemplateEngine());
-
-        post("/alue/" + uudenAlueenTunnus, (req, res) -> {
-            String viestiketjuNimi = req.queryParams("viestiketjuNimi");
-            int uudenViestiketjunTunnus = viestiketjuDao.findSuurinTunnus();
-            viestiketjuDao.insert(uudenAlueenTunnus, viestiketjuNimi);
-            Alue viestiketjunAlue = alueDao.findOne(uudenAlueenTunnus);
-            kuunteleOsoitteetViestiketjuille();
-
-            HashMap map = new HashMap<>();
-            map.put("aluenimi", viestiketjunAlue.getNimi());
-            map.put("alueosoite", uudenAlueenTunnus);
-            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
-            map.put("viestiketjuDao", viestiketjuDao);
-            return new ModelAndView(map, "Alue");
-        }, new ThymeleafTemplateEngine());
+//    public void kuunteleOsoiteUudelleAlueelle() throws Exception {
+//        int uudenAlueenTunnus = alueDao.findSuurinTunnus();
+//        get("/alue/" + uudenAlueenTunnus, (req, res) -> {
+//            HashMap map = new HashMap<>();
+//            map.put("aluenimi", alueDao.findOne(uudenAlueenTunnus).getNimi());
+//            map.put("alueosoite", uudenAlueenTunnus);
+//            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
+//            map.put("viestiketjuDao", viestiketjuDao);
+//            return new ModelAndView(map, "Alue");
+//        }, new ThymeleafTemplateEngine());
+//
+//        post("/alue/" + uudenAlueenTunnus, (req, res) -> {
+//            String viestiketjuNimi = req.queryParams("viestiketjuNimi");
+//            int uudenViestiketjunTunnus = viestiketjuDao.findSuurinTunnus();
+//            viestiketjuDao.insert(uudenAlueenTunnus, viestiketjuNimi);
+//            Alue viestiketjunAlue = alueDao.findOne(uudenAlueenTunnus);
+//            kuunteleOsoitteetViestiketjuille();
+//
+//            HashMap map = new HashMap<>();
+//            map.put("aluenimi", viestiketjunAlue.getNimi());
+//            map.put("alueosoite", uudenAlueenTunnus);
+//            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
+//            map.put("viestiketjuDao", viestiketjuDao);
+//            return new ModelAndView(map, "Alue");
+//        }, new ThymeleafTemplateEngine());
+//    }
+    private void muodostaAlueenHashmap(Alue alue, HashMap map) throws Exception {
+        map.put("aluenimi", "Alue: " + alue.getNimi());
+        map.put("alueosoite", alue.getTunnus());
+        map.put("viestiketjut", viestiketjuDao.findAll(alue.getTunnus()));
+        map.put("viestiketjuDao", viestiketjuDao);
     }
 
     public void kuunteleOsoitteetAlueille() throws Exception {
         for (Alue alue : alueDao.findAll()) {
-            int alueTunnus = alue.getTunnus();
-            get("/alue/" + alueTunnus, (req, res) -> {
+            get("/alue/" + alue.getTunnus(), (req, res) -> {
                 HashMap map = new HashMap<>();
-                map.put("aluenimi", alue.getNimi());
-                map.put("alueosoite", alueTunnus);
-                map.put("viestiketjut", viestiketjuDao.findAll(alueTunnus));
-                map.put("viestiketjuDao", viestiketjuDao);
+                muodostaAlueenHashmap(alue, map);
                 return new ModelAndView(map, "Alue");
             }, new ThymeleafTemplateEngine());
 
-            post("/alue/" + alueTunnus, (req, res) -> {
+            post("/alue/" + alue.getTunnus(), (req, res) -> {
                 String viestiketjuNimi = req.queryParams("viestiketjuNimi");
-                int uudenViestiketjunTunnus = viestiketjuDao.findSuurinTunnus();
-                viestiketjuDao.insert(alueTunnus, viestiketjuNimi);
-                kuunteleOsoitteetViestiketjuille();
-
                 HashMap map = new HashMap<>();
-                map.put("aluenimi", alue.getNimi());
-                map.put("alueosoite", alueTunnus);
-                map.put("viestiketjut", viestiketjuDao.findAll(alueTunnus));
-                map.put("viestiketjuDao", viestiketjuDao);
+
+                if (!viestiketjuNimi.isEmpty()) {
+                    viestiketjuDao.insert(alue.getTunnus(), viestiketjuNimi);
+                    map.put("viestiKayttajalle", "Lisätty viestiketju: \"" + viestiketjuNimi + "\"");
+                    kuunteleOsoitteetViestiketjuille();
+                } else {
+                    map.put("eiTyhjaaKetjua", "Viestiketjun nimi ei saa olla tyhjä");
+                }
+
+                muodostaAlueenHashmap(alue, map);
                 return new ModelAndView(map, "Alue");
             }, new ThymeleafTemplateEngine());
         }
     }
 
+    private void muodostaViestiketjunHashmap(int alue, Viestiketju ketju, HashMap map) throws Exception {
+        map.put("aluenimi", "Alue: " + alueDao.findOne(alue).getNimi());
+        map.put("ketjunimi", "Viestiketju: " + ketju.getOtsikko());
+        map.put("ketjuosoite", ketju.getTunnus());
+        map.put("viestit", viestiketjuDao.findViestit(ketju.getTunnus()));
+        map.put("viestiDao", viestiDao);
+    }
+
     public void kuunteleOsoitteetViestiketjuille() throws Exception {
         for (Viestiketju viestiketju : viestiketjuDao.findAll()) {
-            int ketju = viestiketju.getTunnus();
-            int alue = viestiketju.getAlue();
-            get("/alue/" + alue + "/viestiketju/" + ketju, (req, res) -> {
+            int viestiketjunTunnus = viestiketju.getTunnus();
+            int ketjunAlueTunnus = viestiketju.getAlue();
+            get("/alue/" + ketjunAlueTunnus + "/viestiketju/" + viestiketjunTunnus, (req, res) -> {
                 HashMap map = new HashMap<>();
-                map.put("aluenimi", alueDao.findOne(alue).getNimi());
-                map.put("ketjunimi", viestiketju.getOtsikko());
-                map.put("ketjuosoite", ketju);
-                map.put("viestit", viestiketjuDao.findViestit(ketju));
-                map.put("viestiDao", viestiDao);
+                muodostaViestiketjunHashmap(ketjunAlueTunnus, viestiketju, map);
                 return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
 
-            post("/alue/" + alue + "/viestiketju/" + ketju, (req, res) -> {
+            post("/alue/" + ketjunAlueTunnus + "/viestiketju/" + viestiketjunTunnus, (req, res) -> {
                 String kayttajaNimi = req.queryParams("kayttajaNimi");
                 String sisalto = req.queryParams("sisalto");
-                viestiDao.insert(ketju, kayttajaNimi, sisalto);
+                viestiDao.insert(viestiketjunTunnus, kayttajaNimi, sisalto);
 
                 HashMap map = new HashMap<>();
-                map.put("aluenimi", alueDao.findOne(alue).getNimi());
-                map.put("ketjunimi", viestiketju.getOtsikko());
-                map.put("ketjuosoite", ketju);
-                map.put("viestit", viestiketjuDao.findViestit(ketju));
-                map.put("viestiDao", viestiDao);
+                muodostaViestiketjunHashmap(ketjunAlueTunnus, viestiketju, map);
                 return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
         }
