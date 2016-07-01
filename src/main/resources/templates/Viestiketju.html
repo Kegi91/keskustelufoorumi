@@ -9,7 +9,7 @@
     <body>
         <h1>SupermegaFoorumi</h1>
         <h4 th:text="${aluenimi}">Alue X:</h4>
-        <h3 th:text="${ketjunnimi}">Ketju Y:</h3>
+        <h3 th:text="${ketjunimi}">Ketju Y:</h3>
         
         <table style="width:100%">
             <tr>
@@ -25,10 +25,13 @@
         </table>
         <br/>
         
-        <form method="POST" action="/alueet">
+        <form method="POST" th:action="${ketjuosoite}">
             <i>Luo uusi viesti:</i><br/>
-            <input type="text" name="nimi"/><br/>
-            <input type="submit" value="Ok"/>
+            Käyttäjänimi:<br/>
+            <input type="text" name="kayttajaNimi"/><br/>
+            Viesti:<br/>
+            <input type="text" name="sisalto"/><br/>
+            <input type="submit" value="Lähetä"/>
         </form>
         <br/>
         

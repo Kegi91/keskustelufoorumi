@@ -144,20 +144,25 @@ public class ViestiketjuDao {
         connection.close();
     }
 
-    public int findLargestTunnus() throws SQLException {
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement(
-//                "SELECT MAX(tunnus) FROM Viestiketju;"
-//        );
-//
-//        stmt.setObject(1, alue);
-//        stmt.setObject(2, otsikko);
-//        stmt.execute();
-//
-//        stmt.close();
-//        connection.close();
+    public int findSuurinTunnus() throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT MAX(tunnus) "
+                + "FROM Viestiketju;"
+        );
 
-        return 0;
+        ResultSet rs = stmt.executeQuery();
+
+        int suurin = 0;
+        if (rs.next()) {
+            suurin = rs.getInt("MAX(tunnus)");
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return suurin;
     }
 
     public List<Viesti> findViestit(int ketju) throws SQLException {

@@ -24,14 +24,14 @@
         </table>
         <br/>
         
-        <form method="POST" action="/alueet">
+        <form method="POST" th:action="${alueosoite}">
             <i>Luo uusi viestiketju:</i><br/>
-            <input type="text" name="nimi"/><br/>
+            <input type="text" name="viestiketjuNimi"/><br/>
             <input type="submit" value="Ok"/>
         </form>
         <br/>
         
-        <a href="/alueet">Kaikki alueet</a>
+        <a th:href="@{~/alueet}">Kaikki alueet</a>
 
     </body>
 </html>
