@@ -67,7 +67,7 @@ public class Database {
         lista.add("CREATE TABLE Viestiketju ("
                 + "tunnus SERIAL PRIMARY KEY, "
                 + "alue INTEGER REFERENCES Alue (tunnus), "
-                + "ostikko varchar(50), "
+                + "otsikko varchar(50), "
                 + "luomisaika TIMESTAMP"
                 + ");");
         lista.add("CREATE TABLE Viesti ("
@@ -82,7 +82,7 @@ public class Database {
         lista.add("INSERT INTO Alue (nimi) VALUES ('Elokuvat');");
         lista.add("INSERT INTO Alue (nimi) VALUES ('Muut');");
 
-        lista.add("INSERT INTO Viestiketju(alue, otsikko, luomisaika) "
+        lista.add("INSERT INTO Viestiketju (alue, otsikko, luomisaika) "
                 + "VALUES (1, 'Java', current_timestamp(2));");
 
         lista.add("INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika) "
