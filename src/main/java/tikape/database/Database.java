@@ -83,10 +83,10 @@ public class Database {
         lista.add("INSERT INTO Alue (nimi) VALUES ('Muut');");
 
         lista.add("INSERT INTO Viestiketju (alue, otsikko, luomisaika) "
-                + "VALUES (1, 'Java', current_timestamp(2));");
+                + "VALUES (1, 'Java', current_timestamp(0));");
 
         lista.add("INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika) "
-                + "VALUES (1, 'Kegi', 'Java ei oo kivaa vaan siedettävää', current_timestamp(2));");
+                + "VALUES (1, 'Kegi', 'Java ei oo kivaa vaan siedettävää', current_timestamp(0));");
 
         return lista;
     }

@@ -195,7 +195,29 @@ public class AlueDao implements Dao<Alue, Integer> {
         if (this.findViestit(alue).size() > 0) {
             return this.findViestit(alue).get(0).getLuomisaika();
         }
-        
+
         return "-";
+    }
+
+    public String findViimeisimmanViestinKayttaja(int alue) throws SQLException {
+        if (this.findViestit(alue).size() > 0) {
+            return this.findViestit(alue).get(0).getKayttaja();
+        }
+
+        return "-";
+    }
+
+    public String findViimeisimmanViestinKetju(int alue) throws SQLException {
+        String palautettava;
+        int ketju;
+        ViestiketjuDao dao = new ViestiketjuDao(this.database);
+        
+        if (this.findViestit(alue).size() == 0) {
+            return "-";
+        }
+        
+        ketju = this.findViestit(alue).get(0).getKetju();
+
+        return dao.findOne(ketju).getOtsikko();
     }
 }

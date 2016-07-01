@@ -199,28 +199,18 @@ public class ViestiketjuDao {
     }
 
     public String findUusimmanViestinAjankohta(int ketju) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement(
-                "SELECT luomisaika "
-                + "FROM Viesti "
-                + "WHERE ketju = ? "
-                + "ORDER BY luomisaika DESC "
-                + "LIMIT 1;"
-        );
-
-        stmt.setObject(1, ketju);
-        ResultSet rs = stmt.executeQuery();
-
-        if (!rs.next()) {
+        if (this.findViestit(ketju).size() == 0) {
             return "-";
         }
-
-        String luomisaika = rs.getString("luomisaika");
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return luomisaika;
+        
+        return this.findViestit(ketju).get(0).getLuomisaika();
+    }
+    
+    public String findUusimmanViestinKayttaja(int ketju) throws SQLException {
+        if (this.findViestit(ketju).size() == 0) {
+            return "-";
+        }
+        
+        return this.findViestit(ketju).get(0).getKayttaja();
     }
 }
