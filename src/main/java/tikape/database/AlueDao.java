@@ -81,21 +81,17 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         stmt.setObject(1, key);
         stmt.execute();
-
         stmt.close();
         connection.close();
     }
 
     public void insert(String nimi) throws SQLException {
-        int uusiTunnus = findSuurinTunnus() + 1;
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO Alue VALUES (?, ?);"
+                "INSERT INTO Alue (nimi) VALUES (?);"
         );
 
-        stmt.setObject(1, uusiTunnus);
-        stmt.setObject(2, nimi);
-
+        stmt.setObject(1, nimi);
         stmt.execute();
         stmt.close();
         connection.close();

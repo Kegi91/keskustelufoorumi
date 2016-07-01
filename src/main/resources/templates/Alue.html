@@ -8,11 +8,13 @@
 
     <body>
         <h1>SupermegaFoorumi</h1>
-        <h3 th:text="${aluenimi}">Alue X:</h3>
+        <h2 th:text="${aluenimi}">Alue X:</h2>
+        <h4 th:text="${eiTyhjaaViestiketjua}"></h4>
+        <h4 th:text="${viestiKayttajalle}"></h4>
         
         <table style="width:100%">
             <tr>
-                <th align="left">Otsikko</th>
+                <th align="left">Viestiketju</th>
                 <th align="left">Viestejä</th>
                 <th align="left">Viimeisin viesti</th>
             </tr>
@@ -31,7 +33,7 @@
         </form>
         <br/>
         
-        <a th:href="@{~/alueet}">Kaikki alueet</a>
+        <a th:href="@{~/alueet}">Takaisin pääsivulle</a>
 
     </body>
 </html>

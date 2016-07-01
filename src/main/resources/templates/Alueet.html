@@ -8,7 +8,8 @@
 
     <body>
         <h1>SupermegaFoorumi</h1>
-        <h3 th:text="${viestiKayttajalle}"></h3>
+        <h4 th:text="${eiTyhjaaAluetta}"></h4>
+        <h4 th:text="${viestiKayttajalle}"></h4>
 
         <table style="width:100%">
             <tr>
@@ -17,7 +18,7 @@
                 <th align="left">Viimeisin viesti</th>
             </tr>
             <tr th:each="Alue: ${alueet}">
-                <td><a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
+                <td>- <a th:href="${Alue.getOsoite()}" th:text="${Alue.getNimi()}">sdfjöosd</a></td>
                 <td><a th:text="${alueDao.findViestienMaara(Alue.getTunnus())}">asd</a></td>
                 <td><a th:text="${alueDao.findViimeisimmanViestinAika(Alue.getTunnus())}">sldk</a></td>
             </tr>
