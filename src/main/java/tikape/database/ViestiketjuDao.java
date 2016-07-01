@@ -170,7 +170,7 @@ public class ViestiketjuDao {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
                 + "FROM Viesti WHERE ketju = ? "
-                + "ORDER BY luomisaika DESC;"
+                + "ORDER BY luomisaika;"
         );
 
         stmt.setObject(1, ketju);
@@ -203,7 +203,8 @@ public class ViestiketjuDao {
             return "-";
         }
         
-        return this.findViestit(ketju).get(0).getLuomisaika();
+        
+        return this.findViestit(ketju).get(findViestienMaara(ketju)-1).getLuomisaika();
     }
     
     public String findUusimmanViestinKayttaja(int ketju) throws SQLException {
@@ -211,6 +212,6 @@ public class ViestiketjuDao {
             return "-";
         }
         
-        return this.findViestit(ketju).get(0).getKayttaja();
+        return this.findViestit(ketju).get(this.findViestienMaara(ketju)-1).getKayttaja();
     }
 }
