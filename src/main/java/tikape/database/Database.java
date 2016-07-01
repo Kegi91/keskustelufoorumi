@@ -60,10 +60,6 @@ public class Database {
     private List<String> postgreLauseet() {
         ArrayList<String> lista = new ArrayList<>();
 
-        lista.add("DROP TABLE Alue;");
-        lista.add("DROP TABLE Viestiketju;");
-        lista.add("DROP TABLE Viesti;");
-
         lista.add("CREATE TABLE Alue ("
                 + "tunnus SERIAL PRIMARY KEY, "
                 + "nimi varchar(50)"
