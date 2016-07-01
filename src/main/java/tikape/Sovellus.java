@@ -29,9 +29,11 @@ public class Sovellus {
 
     public void kuuntelePaasivunOsoite() throws Exception {
         get("/alueet", (req, res) -> {
+            
             HashMap map = new HashMap<>();
             map.put("alueet", alueDao.findAll());
             map.put("alueDao", alueDao);
+            
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
 
@@ -43,43 +45,17 @@ public class Sovellus {
                 alueDao.insert(uudenAlueenNimi);
                 map.put("viestiKayttajalle", "Lisätty alue: \"" + uudenAlueenNimi + "\"");
                 kuunteleOsoitteetAlueille();
-//                kuunteleOsoiteUudelleAlueelle();
             } else {
                 map.put("eiTyhjaaAluetta", "Alueen nimi ei saa olla tyhjä");
             }
 
             map.put("alueet", alueDao.findAll());
             map.put("alueDao", alueDao);
+            
             return new ModelAndView(map, "Alueet");
         }, new ThymeleafTemplateEngine());
     }
 
-//    public void kuunteleOsoiteUudelleAlueelle() throws Exception {
-//        int uudenAlueenTunnus = alueDao.findSuurinTunnus();
-//        get("/alue/" + uudenAlueenTunnus, (req, res) -> {
-//            HashMap map = new HashMap<>();
-//            map.put("aluenimi", alueDao.findOne(uudenAlueenTunnus).getNimi());
-//            map.put("alueosoite", uudenAlueenTunnus);
-//            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
-//            map.put("viestiketjuDao", viestiketjuDao);
-//            return new ModelAndView(map, "Alue");
-//        }, new ThymeleafTemplateEngine());
-//
-//        post("/alue/" + uudenAlueenTunnus, (req, res) -> {
-//            String viestiketjuNimi = req.queryParams("viestiketjuNimi");
-//            int uudenViestiketjunTunnus = viestiketjuDao.findSuurinTunnus();
-//            viestiketjuDao.insert(uudenAlueenTunnus, viestiketjuNimi);
-//            Alue viestiketjunAlue = alueDao.findOne(uudenAlueenTunnus);
-//            kuunteleOsoitteetViestiketjuille();
-//
-//            HashMap map = new HashMap<>();
-//            map.put("aluenimi", viestiketjunAlue.getNimi());
-//            map.put("alueosoite", uudenAlueenTunnus);
-//            map.put("viestiketjut", viestiketjuDao.findAll(uudenAlueenTunnus));
-//            map.put("viestiketjuDao", viestiketjuDao);
-//            return new ModelAndView(map, "Alue");
-//        }, new ThymeleafTemplateEngine());
-//    }
     private void muodostaAlueenHashmap(Alue alue, HashMap map) throws Exception {
         map.put("aluenimi", "Alue: " + alue.getNimi());
         map.put("alueosoite", alue.getTunnus());
@@ -125,19 +101,23 @@ public class Sovellus {
         for (Viestiketju viestiketju : viestiketjuDao.findAll()) {
             int viestiketjunTunnus = viestiketju.getTunnus();
             int ketjunAlueTunnus = viestiketju.getAlue();
+     
             get("/alue/" + ketjunAlueTunnus + "/viestiketju/" + viestiketjunTunnus, (req, res) -> {
                 HashMap map = new HashMap<>();
                 muodostaViestiketjunHashmap(ketjunAlueTunnus, viestiketju, map);
+            
                 return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
 
             post("/alue/" + ketjunAlueTunnus + "/viestiketju/" + viestiketjunTunnus, (req, res) -> {
                 String kayttajaNimi = req.queryParams("kayttajaNimi");
                 String sisalto = req.queryParams("sisalto");
+                
                 viestiDao.insert(viestiketjunTunnus, kayttajaNimi, sisalto);
 
                 HashMap map = new HashMap<>();
                 muodostaViestiketjunHashmap(ketjunAlueTunnus, viestiketju, map);
+                
                 return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
         }

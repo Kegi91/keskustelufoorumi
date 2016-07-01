@@ -52,7 +52,8 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
-                + "FROM Viesti;"
+                + "FROM Viesti "
+                + "ORDER BY luomisaika DESC;"
         );
 
         ResultSet rs = stmt.executeQuery();
@@ -111,7 +112,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         stmt.setObject(2, kayttaja);
         stmt.setObject(3, sisalto);
         stmt.execute();
-        
+
         stmt.close();
         connection.close();
     }
@@ -122,8 +123,6 @@ public class ViestiDao implements Dao<Viesti, Integer> {
                 "SELECT MAX(tunnus) FROM Viesti;"
         );
 
-//        stmt.setObject(1, alue);
-//        stmt.setObject(2, otsikko);
         ResultSet rs = stmt.executeQuery();
         int suurin = rs.getInt("MAX(tunnus)");
 
@@ -133,36 +132,6 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         return suurin;
     }
 
-//    public List<Viesti> findViestit(int ketju) throws SQLException {
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement(
-//                "SELECT * "
-//                + "FROM Viesti WHERE ketju = ? "
-//                + "ORDER BY luomisaika DESC;"
-//        );
-//
-//        stmt.setObject(1, ketju);
-//        ResultSet rs = stmt.executeQuery();
-//
-//        List<Viesti> viestit = new ArrayList<>();
-//
-//        while (rs.next()) {
-//            String kayttaja = rs.getString("kayttaja");
-//            String luomisaika = rs.getString("luomisaika");
-//            String sisalto = rs.getString("sisalto");
-//
-//            viestit.add(new Viesti(ketju, kayttaja, luomisaika, sisalto));
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//
-//        return viestit;
-//    }
-//    public int findViestienMaara(int ketju) throws SQLException {
-//        return findViestit(ketju).size();
-//    }
     public String findUusimmanViestinAjankohta(int ketju) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(

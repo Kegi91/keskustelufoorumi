@@ -170,7 +170,7 @@ public class ViestiketjuDao {
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * "
                 + "FROM Viesti WHERE ketju = ? "
-                + "ORDER BY luomisaika;"
+                + "ORDER BY luomisaika DESC;"
         );
 
         stmt.setObject(1, ketju);

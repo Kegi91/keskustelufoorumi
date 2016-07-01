@@ -90,43 +90,6 @@ public class Database {
 
         return lista;
     }
-    
-    private List<String> sqliteLauseet() {
-        ArrayList<String> lista = new ArrayList<>();
-
-        lista.add("CREATE TABLE Alue ("
-                + "tunnus integer PRIMARY KEY, "
-                + "nimi varchar(50)"
-                + ");");
-        lista.add("CREATE TABLE Viestiketju ("
-                + "tunnus integer PRIMARY KEY, "
-                + "alue INTEGER, "
-                + "ostikko varchar(50), "
-                + "luomisaika DATETIME, "
-                + "FOREIGN KEY(alue) REFERENCES Alue(tunnus)"
-                + ");");
-        lista.add("CREATE TABLE Viesti ("
-                + "tunnus SERIAL PRIMARY KEY, "
-                + "ketju INTEGER, "
-                + "kayttaja varchar(50), "
-                + "luomisaika DATETIME, "
-                + "sisalto varchar(500), "
-                + "FOREIGN KEY ketju REFERENCES Viestiketju(tunnus)"
-                + ");");
-
-        lista.add("INSERT INTO Alue (nimi) VALUES ('Ohjelmointi');");
-        lista.add("INSERT INTO Alue (nimi) VALUES ('Musiikki');");
-        lista.add("INSERT INTO Alue (nimi) VALUES ('Elokuvat');");
-        lista.add("INSERT INTO Alue (nimi) VALUES ('Muut');");
-
-        lista.add("INSERT INTO Viestiketju(alue, otsikko, luomisaika) "
-                + "VALUES (1, 'Java', DATETIME('now','local'));");
-
-        lista.add("INSERT INTO Viesti (ketju, kayttaja, sisalto, luomisaika) "
-                + "VALUES (1, 'Kegi', 'Java ei oo kivaa vaan siedettävää', DATETIME('now', 'local'));");
-
-        return lista;
-    }
 
     public boolean onPostgre() {
         return this.databaseAddress.contains("postgre");
