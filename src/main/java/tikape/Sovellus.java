@@ -72,7 +72,7 @@ public class Sovellus {
             }, new ThymeleafTemplateEngine());
 
             post("/alue/" + alue.getTunnus(), (req, res) -> {
-                String viestiketjuNimi = teeTurvalliseksi(req.queryParams("viestiketjuNimi"));
+                String viestiketjuNimi = req.queryParams("viestiketjuNimi");
                 HashMap map = new HashMap<>();
 
                 if (!viestiketjuNimi.isEmpty()) {
@@ -111,8 +111,8 @@ public class Sovellus {
             }, new ThymeleafTemplateEngine());
 
             post("/alue/" + ketjunAlueTunnus + "/viestiketju/" + viestiketjunTunnus, (req, res) -> {
-                String kayttajaNimi = teeTurvalliseksi(req.queryParams("kayttajaNimi"));
-                String sisalto = teeTurvalliseksi(req.queryParams("sisalto"));
+                String kayttajaNimi = req.queryParams("kayttajaNimi");
+                String sisalto = req.queryParams("sisalto");
 
                 viestiDao.insert(viestiketjunTunnus, kayttajaNimi, sisalto);
 
@@ -122,11 +122,5 @@ public class Sovellus {
                 return new ModelAndView(map, "Viestiketju");
             }, new ThymeleafTemplateEngine());
         }
-    }
-    
-    private String teeTurvalliseksi(String teksti) {
-        teksti = teksti.replaceAll("<", " ");
-        teksti = teksti.replaceAll(">", " ");
-        return teksti;
     }
 }
